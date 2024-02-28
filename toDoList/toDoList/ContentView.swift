@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var numOfTasks : Int = 0
     @State private var tasks : String = ""
+    var taskList : Array = []
+    
     
     var body: some View {
         NavigationView {
@@ -19,7 +21,7 @@ struct ContentView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 HStack {
-                    Button("Add Task", action: newTask)
+                    Button("Add Task", action: addTask)
                         .padding()
                         .background(Color.gray)
                         .foregroundColor(.white)
@@ -29,6 +31,9 @@ struct ContentView: View {
                         .background(Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
+                    List (tasks, id: \.self){ term in 
+                        Text(term)
+                    }
                 }
                 .padding()
             }
@@ -38,8 +43,8 @@ struct ContentView: View {
        
     }
     
-    func newTask(){
-        
+    func addTask(){
+        taskList += tasks
     }
     func deleteAll(){
         
