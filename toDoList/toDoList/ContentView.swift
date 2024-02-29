@@ -10,30 +10,36 @@ import SwiftUI
 struct ContentView: View {
     @State private var numOfTasks : Int = 0
     @State private var tasks : String = ""
-    var taskList : Array = []
+    @State var taskList : [String] = []
     
     
     var body: some View {
         NavigationView {
             VStack {
-                Text("Number of tasks: \(numOfTasks)")
+                HStack{
+                    Text("Number of tasks: \(numOfTasks)")
+                    Spacer()
+                        .padding()
+                }
                 TextField("Enter a new task", text: $tasks)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                
                 HStack {
                     Button("Add Task", action: addTask)
                         .padding()
-                        .background(Color.gray)
+                        .background(tasks.isEmpty ? Color.gray : Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     Button("Remove All Tasks", action: deleteAll)
                         .padding()
-                        .background(Color.gray)
+                        .background(taskList.isEmpty ? Color.gray : Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
-                    List (tasks, id: \.self){ term in 
-                        Text(term)
                     }
+                List{
+                    ForEach(taskList, id: \.self){ item in
+                        Text("\(item)")
+                    }
+                    .onDelete(perform: deleteItem)
                 }
                 .padding()
             }
@@ -44,10 +50,18 @@ struct ContentView: View {
     }
     
     func addTask(){
-        taskList += tasks
+        if !tasks.isEmpty{
+            taskList.append(tasks)
+            numOfTasks += 1
+        }
+    }
+    func deleteItem(offset: IndexSet){
+        taskList.remove(atOffsets: offset)
+        numOfTasks -= 1
     }
     func deleteAll(){
-        
+        taskList.removeAll()
+        numOfTasks = 0
     }
 }
 
